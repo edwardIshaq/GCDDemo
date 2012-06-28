@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import "Defenitions.h"
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -14,16 +15,24 @@
 @end
 
 @implementation DetailViewController
+@synthesize blockLabels = _blockLabels;
 
 @synthesize detailItem = _detailItem;
-@synthesize detailDescriptionLabel = _detailDescriptionLabel;
+@synthesize DemoLabel = _DemoLabel;
+@synthesize logLabel = _logLabel;
+@synthesize explainLabel = _explainLabel;
 @synthesize masterPopoverController = _masterPopoverController;
+@synthesize gcdMaster;
+
 
 - (void)dealloc
 {
     [_detailItem release];
-    [_detailDescriptionLabel release];
     [_masterPopoverController release];
+    [_DemoLabel release];
+    [_logLabel release];
+    [_explainLabel release];
+    [_blockLabels release];
     [super dealloc];
 }
 
@@ -44,27 +53,33 @@
     }        
 }
 
+- (void)resetBlockLabels {
+    [self.blockLabels makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[UIColor yellowColor]];
+}
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
-    }
+    [self resetBlockLabels];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.gcdMaster = [[GCDMaster new] autorelease];
+    self.gcdMaster.delegate = self;
     [self configureView];
 }
 
 - (void)viewDidUnload
 {
+    [self setDemoLabel:nil];
+    [self setLogLabel:nil];
+    [self setExplainLabel:nil];
+    [self setBlockLabels:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-    self.detailDescriptionLabel = nil;
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -97,4 +112,43 @@
     self.masterPopoverController = nil;
 }
 
+- (UIColor*)colorForStatus:(BlockStatus)blockStatus {
+    if (blockStatus == BlockStatusNotStarted) {
+        return [UIColor yellowColor];
+    }
+    else if (blockStatus == BlockStatusStarted) {
+        return [UIColor greenColor];
+    }
+    else if (blockStatus == BlockStatusFinished) {
+        return [UIColor redColor];
+    }
+    return [UIColor grayColor];
+}
+
+#pragma mark -
+#pragma mark Queue calls
+- (void)runSerialQueue {
+    [self resetBlockLabels];
+    self.DemoLabel.text = @"Running Serial Queue Demo";
+    self.explainLabel.text = @"This will execute 4 blocks in a serial manner, each block will iterate for a differnet number of times.\nNotice that each the blocks are executed one after the other";
+    self.logLabel.text = @"";
+    [gcdMaster serialQueueDemo];
+}
+- (void)runConcurrentQueue {
+    [self resetBlockLabels];
+    self.DemoLabel.text = @"Running Concurrent Queue Demo";
+    self.explainLabel.text = @"This will execute 4 blocks in a concurrent manner, each block will iterate for a differnet number of times.\nNotice that the messages come from different blocks and how they interlace";
+    self.logLabel.text = @"";
+    [gcdMaster concurrentQueueDemo];
+}
+
+- (void)GCDMaster:(GCDMaster *)gcdMaster finishedWithString:(NSString *)result {
+    self.logLabel.text = result;
+}
+- (void)GCDMaster:(GCDMaster *)gcdMaster blockNumber:(NSUInteger)blockNumber changedStatus:(BlockStatus)status{
+    NSLog(@"block: %d status:%d",blockNumber, status);
+    UIColor *statusColor = [self colorForStatus:status];
+    UILabel *blockLabel = [self.blockLabels objectAtIndex:blockNumber];
+    [blockLabel setBackgroundColor:statusColor];
+}
 @end

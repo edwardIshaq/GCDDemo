@@ -41,10 +41,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+//    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)] autorelease];
-    self.navigationItem.rightBarButtonItem = addButton;
+//    UIBarButtonItem *addButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)] autorelease];
+//    self.navigationItem.rightBarButtonItem = addButton;
+    if (!_objects) {
+        _objects = [[NSMutableArray alloc] init];
+    }
+    [_objects addObject:@"Serial Queue"];
+    [_objects addObject:@"Concurrent Queue"];
 }
 
 - (void)viewDidUnload
@@ -58,6 +63,7 @@
     return YES;
 }
 
+/*
 - (void)insertNewObject:(id)sender
 {
     if (!_objects) {
@@ -67,7 +73,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
-
+*/
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -99,7 +105,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,8 +136,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDate *object = [_objects objectAtIndex:indexPath.row];
-    self.detailViewController.detailItem = object;
+    NSUInteger row = indexPath.row;
+    switch (row) {
+        case 0:
+            [self.detailViewController runSerialQueue];
+            break;
+        
+        case 1:
+            [self.detailViewController runConcurrentQueue];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 @end

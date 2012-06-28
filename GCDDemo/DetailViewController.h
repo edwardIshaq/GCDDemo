@@ -7,11 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#include "GCDMaster.h"
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, GCDMasterDelegate>
 
+@property (nonatomic, retain) GCDMaster *gcdMaster;
 @property (strong, nonatomic) id detailItem;
+@property (retain, nonatomic) IBOutlet UILabel *DemoLabel;
+@property (retain, nonatomic) IBOutlet UITextView *logLabel;
+@property (retain, nonatomic) IBOutlet UILabel *explainLabel;
 
-@property (strong, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+- (IBAction)runSerialQueue;
+- (IBAction)runConcurrentQueue;
+@property (retain, nonatomic) IBOutletCollection(UILabel) NSArray *blockLabels;
 
 @end

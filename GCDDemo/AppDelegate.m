@@ -7,10 +7,9 @@
 //
 
 #import "AppDelegate.h"
-
 #import "MasterViewController.h"
-
 #import "DetailViewController.h"
+#import "GCDMaster.h"
 
 @implementation AppDelegate
 
@@ -42,8 +41,14 @@
     self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterNavigationController, detailNavigationController, nil];
     self.window.rootViewController = self.splitViewController;
     [self.window makeKeyAndVisible];
+    
+    GCDMaster *gcdMaster = [GCDMaster new];
+//    [gcdMaster blockDemo];
+    
+    [gcdMaster release];
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
