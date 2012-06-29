@@ -20,12 +20,15 @@ static dispatch_queue_t concurrentQueue = NULL;
 + (void)initialize {
     serialQueue = dispatch_queue_create("com.3Pillar.SerialQueue", NULL);
     concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_suspend(serialQueue);
+    dispatch_suspend(concurrentQueue);
 }
 - (id)init {
     self = [super init];
     if (self) {
         self.log = [[NSMutableString new] autorelease];
         queueState = QueueStateNone;
+        
     }
     return self;
 }
@@ -47,6 +50,17 @@ static dispatch_queue_t concurrentQueue = NULL;
 
 
 - (void)updateUI {
+    if (++blockCounter < 4) {
+        return;
+    }
+    
+    if (queueState == QueueStateSerial) {
+        dispatch_suspend(serialQueue);
+    }
+    else if (queueState == QueueStateConcurrent){
+        dispatch_suspend(concurrentQueue);
+    }
+    
     if (self.delegate && [self.delegate conformsToProtocol:@protocol(GCDMasterDelegate)]) {
         [self.delegate GCDMaster:self finishedWithString:[NSString stringWithString:self.log]];
     }
@@ -54,18 +68,24 @@ static dispatch_queue_t concurrentQueue = NULL;
 
 static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, char letter, NSUInteger blockNumber, GCDMaster *delegate){
     NSString *blockName = [NSString stringWithFormat:@"Block #%d", blockNumber];
-    [delegate.log appendString:[NSString stringWithFormat:@"\n=========== Start %@=============\n start from %c do %d iterations",blockName,letter, count]];
+    [delegate.log appendString:[NSString stringWithFormat:@"\n===== ====== Start %@=============\n start from %c do %d iterations",blockName,letter, count]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [delegate.delegate GCDMaster:delegate blockNumber:blockNumber changedStatus:BlockStatusStarted];
     });
     
+    NSMutableString *msg = [NSMutableString new];
     for(int i=0; i<count; i++){
-        NSString *msg = [NSString stringWithFormat:@"\nRunning %@: iteration %d - asci: %c",blockName,i, letter];
-        [delegate.log appendString:msg];
+        [msg setString:[NSString stringWithFormat:@"\nRunning %@: iteration %d - asci: %c",blockName,i, letter]];
+        @synchronized(delegate){
+            [delegate.log appendString:msg];
+        }
         letter++;
     }
-    [delegate.log appendString:[NSString stringWithFormat:@"\n=========== END %@=============\n", blockName]];
+    [msg release];
+    @synchronized(delegate){
+        [delegate.log appendString:[NSString stringWithFormat:@"\n=========== END %@=============\n", blockName]];
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         [delegate.delegate GCDMaster:delegate blockNumber:blockNumber changedStatus:BlockStatusFinished];
         [delegate updateUI];
@@ -74,10 +94,13 @@ static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, ch
 
 
 - (void)serialQueueDemo {
-    if (queueState == QueueStateConcurrent) {
-        dispatch_suspend(concurrentQueue);       
-        dispatch_resume(serialQueue);
+    blockCounter = 0;
+    
+    if (queueState == QueueStateConcurrent) 
+    {
+        dispatch_suspend(concurrentQueue);
     }
+    dispatch_resume(serialQueue);
     queueState = QueueStateSerial;
  
     [self.log setString:@""];
@@ -85,14 +108,15 @@ static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, ch
     dispatch_async(serialQueue, ^{counterBlock(1000   ,'A'    ,1  ,self);});
     dispatch_async(serialQueue, ^{counterBlock(20000  ,'0'    ,2  ,self);});
     dispatch_async(serialQueue, ^{counterBlock(2000  ,'Z'    ,3  ,self);});
-    
+ 
 }
 
 - (void)concurrentQueueDemo {
+    blockCounter = 0;
     if (queueState == QueueStateSerial) {
         dispatch_suspend(serialQueue);
-        dispatch_resume(concurrentQueue);
     }
+    dispatch_resume(concurrentQueue);
     queueState = QueueStateConcurrent;
     
     [self.log setString:@""];

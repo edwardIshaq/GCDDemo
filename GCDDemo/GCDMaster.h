@@ -13,6 +13,7 @@
 
 @interface GCDMaster : NSObject {
     QueueState queueState;
+    short blockCounter;
 }
 
 @property (assign) id <GCDMasterDelegate> delegate;

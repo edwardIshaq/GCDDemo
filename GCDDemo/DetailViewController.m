@@ -146,7 +146,6 @@
     self.logLabel.text = result;
 }
 - (void)GCDMaster:(GCDMaster *)gcdMaster blockNumber:(NSUInteger)blockNumber changedStatus:(BlockStatus)status{
-    NSLog(@"block: %d status:%d",blockNumber, status);
     UIColor *statusColor = [self colorForStatus:status];
     UILabel *blockLabel = [self.blockLabels objectAtIndex:blockNumber];
     [blockLabel setBackgroundColor:statusColor];

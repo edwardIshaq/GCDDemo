@@ -42,10 +42,6 @@
     self.window.rootViewController = self.splitViewController;
     [self.window makeKeyAndVisible];
     
-    GCDMaster *gcdMaster = [GCDMaster new];
-//    [gcdMaster blockDemo];
-    
-    [gcdMaster release];
     return YES;
 }
 
