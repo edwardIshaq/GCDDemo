@@ -12,7 +12,7 @@
 
 @synthesize delegate;
 @synthesize log;
-
+@synthesize blockCounter;
 
 static dispatch_queue_t serialQueue = NULL;
 static dispatch_queue_t concurrentQueue = NULL;
@@ -50,16 +50,13 @@ static dispatch_queue_t concurrentQueue = NULL;
 
 
 - (void)updateUI {
-    if (++blockCounter < 4) {
-        return;
-    }
-    
     if (queueState == QueueStateSerial) {
         dispatch_suspend(serialQueue);
     }
     else if (queueState == QueueStateConcurrent){
         dispatch_suspend(concurrentQueue);
     }
+    queueState = QueueStateNone;
     
     if (self.delegate && [self.delegate conformsToProtocol:@protocol(GCDMasterDelegate)]) {
         [self.delegate GCDMaster:self finishedWithString:[NSString stringWithString:self.log]];
@@ -76,19 +73,20 @@ static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, ch
     
     NSMutableString *msg = [NSMutableString new];
     for(int i=0; i<count; i++){
-        [msg setString:[NSString stringWithFormat:@"\nRunning %@: iteration %d - asci: %c",blockName,i, letter]];
-        @synchronized(delegate){
-            [delegate.log appendString:msg];
-        }
+        [msg appendString:[NSString stringWithFormat:@"\nRunning %@: iteration %d - asci: %c",blockName,i, letter]];
+//        @synchronized(delegate){
+//            [delegate.log appendString:msg];
+//        }
         letter++;
     }
     [msg release];
     @synchronized(delegate){
         [delegate.log appendString:[NSString stringWithFormat:@"\n=========== END %@=============\n", blockName]];
     }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [delegate.delegate GCDMaster:delegate blockNumber:blockNumber changedStatus:BlockStatusFinished];
-        [delegate updateUI];
+        if (++delegate.blockCounter == 4) [delegate updateUI];
     });
 };
 
@@ -107,7 +105,7 @@ static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, ch
     dispatch_async(serialQueue, ^{counterBlock(20000  ,'a'    ,0  ,self);});
     dispatch_async(serialQueue, ^{counterBlock(1000   ,'A'    ,1  ,self);});
     dispatch_async(serialQueue, ^{counterBlock(20000  ,'0'    ,2  ,self);});
-    dispatch_async(serialQueue, ^{counterBlock(2000  ,'Z'    ,3  ,self);});
+    dispatch_async(serialQueue, ^{counterBlock(2000   ,'Z'    ,3  ,self);});
  
 }
 
@@ -123,7 +121,7 @@ static void (^counterBlock)(int,char, NSUInteger , GCDMaster*) = ^(int count, ch
     dispatch_async(concurrentQueue, ^{counterBlock(20000  ,'a'    ,0  ,self);});
     dispatch_async(concurrentQueue, ^{counterBlock(1000   ,'A'    ,1  ,self);});
     dispatch_async(concurrentQueue, ^{counterBlock(20000  ,'0'    ,2  ,self);});
-    dispatch_async(concurrentQueue, ^{counterBlock(2000  ,'Z'    ,3  ,self);});
+    dispatch_async(concurrentQueue, ^{counterBlock(2000   ,'Z'    ,3  ,self);});
 
 }
 @end

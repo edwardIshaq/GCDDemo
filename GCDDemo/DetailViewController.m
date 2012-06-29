@@ -16,6 +16,7 @@
 
 @implementation DetailViewController
 @synthesize blockLabels = _blockLabels;
+@synthesize runButtons = _runButtons;
 
 @synthesize detailItem = _detailItem;
 @synthesize DemoLabel = _DemoLabel;
@@ -33,6 +34,7 @@
     [_logLabel release];
     [_explainLabel release];
     [_blockLabels release];
+    [_runButtons release];
     [super dealloc];
 }
 
@@ -77,6 +79,7 @@
     [self setLogLabel:nil];
     [self setExplainLabel:nil];
     [self setBlockLabels:nil];
+    [self setRunButtons:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 
@@ -125,9 +128,17 @@
     return [UIColor grayColor];
 }
 
+- (void)setButtonsEnabled:(BOOL)state {
+    for (UIButton *btn in self.runButtons) {
+        btn.enabled = state;
+    }
+}
+
 #pragma mark -
 #pragma mark Queue calls
 - (void)runSerialQueue {
+    [self setButtonsEnabled:NO];
+    
     [self resetBlockLabels];
     self.DemoLabel.text = @"Running Serial Queue Demo";
     self.explainLabel.text = @"This will execute 4 blocks in a serial manner, each block will iterate for a differnet number of times.\nNotice that each the blocks are executed one after the other";
@@ -135,7 +146,7 @@
     [gcdMaster serialQueueDemo];
 }
 - (void)runConcurrentQueue {
-    [self resetBlockLabels];
+    [self setButtonsEnabled:NO];[self resetBlockLabels];
     self.DemoLabel.text = @"Running Concurrent Queue Demo";
     self.explainLabel.text = @"This will execute 4 blocks in a concurrent manner, each block will iterate for a differnet number of times.\nNotice that the messages come from different blocks and how they interlace";
     self.logLabel.text = @"";
@@ -143,6 +154,7 @@
 }
 
 - (void)GCDMaster:(GCDMaster *)gcdMaster finishedWithString:(NSString *)result {
+    [self setButtonsEnabled:YES];
     self.logLabel.text = result;
 }
 - (void)GCDMaster:(GCDMaster *)gcdMaster blockNumber:(NSUInteger)blockNumber changedStatus:(BlockStatus)status{

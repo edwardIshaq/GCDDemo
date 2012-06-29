@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "GCDMaster.h"
 

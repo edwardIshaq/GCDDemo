@@ -13,9 +13,7 @@
 		DBA45A52159B75CB0086F9D0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DBA45A50159B75CB0086F9D0 /* InfoPlist.strings */; };
 		DBA45A54159B75CB0086F9D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA45A53159B75CB0086F9D0 /* main.m */; };
 		DBA45A58159B75CB0086F9D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA45A57159B75CB0086F9D0 /* AppDelegate.m */; };
-		DBA45A5B159B75CB0086F9D0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA45A5A159B75CB0086F9D0 /* MasterViewController.m */; };
 		DBA45A5E159B75CB0086F9D0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA45A5D159B75CB0086F9D0 /* DetailViewController.m */; };
-		DBA45A61159B75CB0086F9D0 /* MasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DBA45A5F159B75CB0086F9D0 /* MasterViewController.xib */; };
 		DBA45A64159B75CB0086F9D0 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DBA45A62159B75CB0086F9D0 /* DetailViewController.xib */; };
 		DBA45A6C159B75CB0086F9D0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBA45A6B159B75CB0086F9D0 /* SenTestingKit.framework */; };
 		DBA45A6D159B75CB0086F9D0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBA45A47159B75CB0086F9D0 /* UIKit.framework */; };
@@ -47,11 +45,8 @@
 		DBA45A55159B75CB0086F9D0 /* GCDDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCDDemo-Prefix.pch"; sourceTree = "<group>"; };
 		DBA45A56159B75CB0086F9D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DBA45A57159B75CB0086F9D0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		DBA45A59159B75CB0086F9D0 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		DBA45A5A159B75CB0086F9D0 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		DBA45A5C159B75CB0086F9D0 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		DBA45A5D159B75CB0086F9D0 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
-		DBA45A60159B75CB0086F9D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController.xib; sourceTree = "<group>"; };
 		DBA45A63159B75CB0086F9D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController.xib; sourceTree = "<group>"; };
 		DBA45A6A159B75CB0086F9D0 /* GCDDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GCDDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBA45A6B159B75CB0086F9D0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -125,9 +120,6 @@
 				DBA45A8A159B8F1F0086F9D0 /* GCDMaster.h */,
 				DBA45A8B159B8F1F0086F9D0 /* GCDMaster.m */,
 				DB5E4497159CF26100464D18 /* Defenitions.h */,
-				DBA45A59159B75CB0086F9D0 /* MasterViewController.h */,
-				DBA45A5A159B75CB0086F9D0 /* MasterViewController.m */,
-				DBA45A5F159B75CB0086F9D0 /* MasterViewController.xib */,
 				DBA45A5C159B75CB0086F9D0 /* DetailViewController.h */,
 				DBA45A5D159B75CB0086F9D0 /* DetailViewController.m */,
 				DBA45A62159B75CB0086F9D0 /* DetailViewController.xib */,
@@ -238,7 +230,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBA45A52159B75CB0086F9D0 /* InfoPlist.strings in Resources */,
-				DBA45A61159B75CB0086F9D0 /* MasterViewController.xib in Resources */,
 				DBA45A64159B75CB0086F9D0 /* DetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +267,6 @@
 			files = (
 				DBA45A54159B75CB0086F9D0 /* main.m in Sources */,
 				DBA45A58159B75CB0086F9D0 /* AppDelegate.m in Sources */,
-				DBA45A5B159B75CB0086F9D0 /* MasterViewController.m in Sources */,
 				DBA45A5E159B75CB0086F9D0 /* DetailViewController.m in Sources */,
 				DBA45A8C159B8F1F0086F9D0 /* GCDMaster.m in Sources */,
 			);
@@ -307,14 +297,6 @@
 				DBA45A51159B75CB0086F9D0 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		DBA45A5F159B75CB0086F9D0 /* MasterViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DBA45A60159B75CB0086F9D0 /* en */,
-			);
-			name = MasterViewController.xib;
 			sourceTree = "<group>";
 		};
 		DBA45A62159B75CB0086F9D0 /* DetailViewController.xib */ = {

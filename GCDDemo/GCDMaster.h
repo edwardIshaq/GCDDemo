@@ -18,6 +18,7 @@
 
 @property (assign) id <GCDMasterDelegate> delegate;
 @property (nonatomic, retain) NSMutableString *log;
+@property (assign) short blockCounter;
 
 - (void)blockDemo;
 - (void)serialQueueDemo;
