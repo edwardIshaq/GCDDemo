@@ -14,32 +14,20 @@
 @implementation AppDelegate
 
 @synthesize window = _window;
-@synthesize splitViewController = _splitViewController;
+@synthesize detailViewController;
 
 - (void)dealloc
 {
     [_window release];
-    [_splitViewController release];
     [super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
 
-    MasterViewController *masterViewController = [[[MasterViewController alloc] initWithNibName:@"MasterViewController" bundle:nil] autorelease];
-    UINavigationController *masterNavigationController = [[[UINavigationController alloc] initWithRootViewController:masterViewController] autorelease];
-
-    DetailViewController *detailViewController = [[[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil] autorelease];
-    UINavigationController *detailNavigationController = [[[UINavigationController alloc] initWithRootViewController:detailViewController] autorelease];
-
-    masterViewController.detailViewController = detailViewController;
-
-    self.splitViewController = [[[UISplitViewController alloc] init] autorelease];
-    self.splitViewController.delegate = detailViewController;
-    self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterNavigationController, detailNavigationController, nil];
-    self.window.rootViewController = self.splitViewController;
+    self.detailViewController = [[[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil] autorelease];    
+    self.window.rootViewController = self.detailViewController;
     [self.window makeKeyAndVisible];
     
     return YES;
