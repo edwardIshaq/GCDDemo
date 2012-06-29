@@ -19,6 +19,8 @@
 
 - (IBAction)runSerialQueue;
 - (IBAction)runConcurrentQueue;
+- (IBAction)runBlockDemo:(id)sender;
+
 @property (retain, nonatomic) IBOutletCollection(UILabel) NSArray *blockLabels;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *runButtons;
 

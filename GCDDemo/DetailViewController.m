@@ -153,6 +153,14 @@
     [gcdMaster concurrentQueueDemo];
 }
 
+- (IBAction)runBlockDemo:(id)sender {
+    [self setButtonsEnabled:NO];[self resetBlockLabels];
+    self.DemoLabel.text = @"Running Block Demo";
+    self.explainLabel.text = @"This will demo the use of a block as a method argument";
+    self.logLabel.text = @"";
+    [gcdMaster blockDemo];
+}
+
 - (void)GCDMaster:(GCDMaster *)gcdMaster finishedWithString:(NSString *)result {
     [self setButtonsEnabled:YES];
     self.logLabel.text = result;
